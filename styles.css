@@ -1,4 +1,3 @@
-/* styles.css */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 20px;
@@ -15,16 +14,18 @@ h1 {
   text-shadow: 1px 1px 3px rgba(0, 77, 64, 0.4);
 }
 
-div {
+/* Limit container width and center */
+section {
+  max-width: 600px;
   background: #ffffffcc;
   padding: 25px 30px;
-  margin-bottom: 25px;
+  margin: 0 auto 25px auto;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 77, 64, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-div:hover {
+section:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 35px rgba(0, 77, 64, 0.3);
 }
@@ -76,6 +77,11 @@ button:hover {
   box-shadow: 0 8px 18px rgba(0, 77, 64, 0.6);
 }
 
+button:focus {
+  outline: 3px solid #004d40;
+  outline-offset: 2px;
+}
+
 #weather-output,
 #crop-output,
 #soil-output,
@@ -87,24 +93,14 @@ button:hover {
   min-height: 40px;
   line-height: 1.4;
 }
+
 img {
   width: 80px;
   height: auto;
   margin-bottom: 10px;
 }
+
 h3 {
   margin: 10px 0 5px;
-}
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px;
-  margin: 5px 0;
-  border-radius: 8px;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #0056b3;
 }
 
