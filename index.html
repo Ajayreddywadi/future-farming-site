@@ -1,55 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Future Farming</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <h1>Future Farming Dashboard</h1>
 
-  <div id="weather-section">
+  <section id="weather-section" aria-label="Weather and Temperature">
     <h2>Weather & Temperature</h2>
-    <input type="text" id="city" placeholder="Enter city">
-    <button onclick="getWeather()">Get Weather</button>
-    <button onclick="getWeatherByLocation()">📍 Use My Location</button>
-    <div id="weather-output"></div>
-  </div>
+    <label for="city">City:</label>
+    <input type="text" id="city" placeholder="Enter city" />
+    <button type="button" id="btn-city-weather">Get Weather</button>
+    <button type="button" id="btn-location-weather">📍 Use My Location</button>
+    <div id="weather-output">Weather information will appear here.</div>
+  </section>
 
-  <div id="crops-section">
+  <section id="crops-section" aria-label="Seasonal Crops">
     <h2>Seasonal Crops</h2>
+    <label for="season">Season:</label>
     <select id="season">
       <option value="summer">Summer</option>
       <option value="winter">Winter</option>
       <option value="monsoon">Monsoon</option>
     </select>
-    <button onclick="showCrops()">Show Crops</button>
-    <div id="crop-output"></div>
-  </div>
+    <button type="button" id="btn-show-crops">Show Crops</button>
+    <div id="crop-output">Select a season and click Show Crops.</div>
+  </section>
 
-  <div id="soil-section">
+  <section id="soil-section" aria-label="Soil Information">
     <h2>Soil Information</h2>
+    <label for="soil-type">Soil Type:</label>
     <select id="soil-type">
       <option value="clay">Clay</option>
       <option value="sandy">Sandy</option>
       <option value="loamy">Loamy</option>
     </select>
-    <button onclick="showSoil()">Show Info</button>
-    <div id="soil-output"></div>
-  </div>
+    <button type="button" id="btn-show-soil">Show Info</button>
+    <div id="soil-output">Select a soil type and click Show Info.</div>
+  </section>
 
-  <div id="price-section">
+  <section id="price-section" aria-label="Market Price Info">
     <h2>Market Price Info</h2>
+    <label for="crop">Crop:</label>
     <select id="crop">
       <option value="Wheat">Wheat</option>
       <option value="Rice">Rice</option>
       <option value="Cotton">Cotton</option>
       <option value="Maize">Maize</option>
     </select>
-    <button onclick="showPrice()">Show Price</button>
-    <div id="price-output"></div>
-  </div>
+    <button type="button" id="btn-show-price">Show Price</button>
+    <div id="price-output">Select a crop and click Show Price.</div>
+  </section>
 
   <script src="script.js"></script>
 </body>
