@@ -2,16 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Future Farming</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <h1>Future Farming Dashboard</h1>
-  
+
   <div id="weather-section">
     <h2>Weather & Temperature</h2>
     <input type="text" id="city" placeholder="Enter city">
     <button onclick="getWeather()">Get Weather</button>
+    <button onclick="getWeatherByLocation()">Use My Location</button>
     <div id="weather-output"></div>
   </div>
 
@@ -37,7 +39,18 @@
     <div id="soil-output"></div>
   </div>
 
+  <div id="price-section">
+    <h2>Market Price Info</h2>
+    <select id="crop">
+      <option value="Wheat">Wheat</option>
+      <option value="Rice">Rice</option>
+      <option value="Cotton">Cotton</option>
+      <option value="Maize">Maize</option>
+    </select>
+    <button onclick="showPrice()">Show Price</button>
+    <div id="price-output"></div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
-
