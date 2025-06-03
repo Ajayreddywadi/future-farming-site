@@ -78,12 +78,76 @@ function getWeatherByLocation() {
         document.getElementById("weather-output").innerText = "Weather data not found for your location.";
       }
     } catch (error) {
-      document.getElementById("weather-output").innerText = "Failed
+      document.getElementById("weather-output").innerText = "Failed to fetch weather data.";
+    } finally {
+      setLoading(false, "weather");
+    }
+  }, error => {
+    setLoading(false, "weather");
+    if (error.code === error.PERMISSION_DENIED) {
+      document.getElementById("weather-output").innerText = "Permission denied. Please enter city manually.";
+    } else {
+      document.getElementById("weather-output").innerText = "Unable to get your location.";
+    }
+  });
+}
 
+function displayWeather(data) {
+  const temp = data.main.temp;
+  const condition = data.weather[0].main;
+  const city = data.name;
 
+  const cropRecommendation = recommendCrop(temp, condition);
+
+  document.getElementById("weather-output").innerHTML = `
+    <h3>Weather in ${city}:</h3>
+    <p>Temperature: ${temp} °C</p>
+    <p>Condition: ${condition}</p>
+    <p><strong>Recommended Crop: ${cropRecommendation}</strong></p>
+  `;
+}
+
+function recommendCrop(temp, condition) {
+  const cond = condition.toLowerCase();
+  if (cond.includes("rain") || cond.includes("drizzle") || cond.includes("thunderstorm")) return "Rice or Sugarcane";
+  if (temp < 15) return "Wheat or Barley";
+  if (temp <= 25) return "Maize or Pulses";
+  return "Cotton or Millet";
+}
+
+function showCrops() {
+  const season = document.getElementById("season").value;
+  const cropsList = crops[season];
+
+  if (cropsList && cropsList.length > 0) {
+    document.getElementById("crop-output").innerText = `Recommended crops for ${season}: ${cropsList.join(", ")}`;
+  } else {
+    document.getElementById("crop-output").innerText = "No crop data available for selected season.";
+  }
+}
+
+function showSoil() {
+  const soil = document.getElementById("soil-type").value;
+  document.getElementById("soil-output").innerText = soilInfo[soil] || "Soil info not available.";
+}
 
 function showPrice() {
   const crop = document.getElementById("crop").value;
-  document.getElementById("price-output").innerText = `${crop} average market price: ${cropPrices[crop] || "Data not available"}`;
+  const price = cropPrices[crop];
+  document.getElementById("price-output").innerText = price ? `${crop} average market price: ${price}` : "Price data not available.";
+}
+
+function setLoading(isLoading, section) {
+  let outputId;
+  switch (section) {
+    case "weather": outputId = "weather-output"; break;
+    case "crop": outputId = "crop-output"; break;
+    case "soil": outputId = "soil-output"; break;
+    case "price": outputId = "price-output"; break;
+  }
+
+  if (outputId) {
+    document.getElementById(outputId).innerText = isLoading ? "Loading..." : "";
+  }
 }
 
