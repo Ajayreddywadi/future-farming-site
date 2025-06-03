@@ -1,1 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Future Farming</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Future Farming Dashboard</h1>
+  
+  <div id="weather-section">
+    <h2>Weather & Temperature</h2>
+    <input type="text" id="city" placeholder="Enter city">
+    <button onclick="getWeather()">Get Weather</button>
+    <div id="weather-output"></div>
+  </div>
+
+  <div id="crops-section">
+    <h2>Seasonal Crops</h2>
+    <select id="season">
+      <option value="summer">Summer</option>
+      <option value="winter">Winter</option>
+      <option value="monsoon">Monsoon</option>
+    </select>
+    <button onclick="showCrops()">Show Crops</button>
+    <div id="crop-output"></div>
+  </div>
+
+  <div id="soil-section">
+    <h2>Soil Information</h2>
+    <select id="soil-type">
+      <option value="clay">Clay</option>
+      <option value="sandy">Sandy</option>
+      <option value="loamy">Loamy</option>
+    </select>
+    <button onclick="showSoil()">Show Info</button>
+    <div id="soil-output"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
