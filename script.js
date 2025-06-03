@@ -19,7 +19,7 @@ const cropPrices = {
   Maize: "₹18/kg"
 };
 
-const apiKey = "YOUR_API_KEY"; // Replace with real API key
+const apiKey = "78de4c1eeb9e461929f017626c2543ff"; // Replace with real API key
 
 async function getWeather() {
   const city = document.getElementById("city").value;
