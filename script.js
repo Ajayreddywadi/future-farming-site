@@ -1,5 +1,3 @@
-// script.js
-
 const crops = {
   summer: ["Maize", "Millets", "Cotton"],
   winter: ["Wheat", "Barley", "Mustard"],
@@ -19,7 +17,10 @@ const cropPrices = {
   Maize: "₹18/kg"
 };
 
-const apiKey = "78de4c1eeb9e461929f017626c2543ff"; // Replace with real API key
+const apiKey = "78de4c1eeb9e461929f017626c2543ff"; // Your working API key
+
+// On page load, auto-detect weather
+window.onload = getWeatherByLocation;
 
 async function getWeather() {
   const city = document.getElementById("city").value;
@@ -30,12 +31,7 @@ async function getWeather() {
   const data = await res.json();
 
   if (data.cod === 200) {
-    const temp = data.main.temp;
-    document.getElementById("weather-output").innerHTML = `
-      <p>Temperature: ${temp}°C</p>
-      <p>Condition: ${data.weather[0].description}</p>
-      <p>Recommended Crop: ${recommendCrop(temp)}</p>
-    `;
+    displayWeather(data);
   } else {
     document.getElementById("weather-output").innerText = "City not found.";
   }
@@ -48,20 +44,31 @@ function getWeatherByLocation() {
     const res = await fetch(url);
     const data = await res.json();
     if (data.cod === 200) {
-      const temp = data.main.temp;
-      document.getElementById("weather-output").innerHTML = `
-        <p>Location: ${data.name}</p>
-        <p>Temperature: ${temp}°C</p>
-        <p>Condition: ${data.weather[0].description}</p>
-        <p>Recommended Crop: ${recommendCrop(temp)}</p>
-      `;
+      displayWeather(data);
     }
   });
 }
 
-function recommendCrop(temp) {
+function displayWeather(data) {
+  const temp = data.main.temp;
+  const condition = data.weather[0].description;
+  const icon = data.weather[0].icon;
+  const city = data.name;
+  const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+
+  document.getElementById("weather-output").innerHTML = `
+    <h3>${city}</h3>
+    <img src="${iconUrl}" alt="Weather Icon">
+    <p><strong>Temperature:</strong> ${temp}°C</p>
+    <p><strong>Condition:</strong> ${condition}</p>
+    <p><strong>Recommended Crop:</strong> ${recommendCrop(temp, condition)}</p>
+  `;
+}
+
+function recommendCrop(temp, condition) {
+  if (condition.includes("rain")) return "Rice or Sugarcane";
   if (temp < 15) return "Wheat or Barley";
-  else if (temp < 30) return "Rice or Maize";
+  else if (temp < 30) return "Maize or Pulses";
   else return "Cotton or Millet";
 }
 
@@ -78,6 +85,6 @@ function showSoil() {
 
 function showPrice() {
   const crop = document.getElementById("crop").value;
-  document.getElementById("price-output").innerText = `${crop} average market price: ${cropPrices[crop]}`;
+  document.getElementById("price-output").innerText = `${crop} average market price: ${cropPrices[crop] || "Data not available"}`;
 }
 
