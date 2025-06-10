@@ -17,7 +17,7 @@ const cropPrices = {
   Maize: "₹18/kg"
 };
 
-const apiKey = "78de4c1eeb9e461929f017626c2543ff"; // Your working API key
+const apiKey = "78de4c1eeb9e461929f017626c2543ff"; // Your API Key
 
 // DOM Elements
 const btnCityWeather = document.getElementById("btn-city-weather");
@@ -25,12 +25,14 @@ const btnLocationWeather = document.getElementById("btn-location-weather");
 const btnShowCrops = document.getElementById("btn-show-crops");
 const btnShowSoil = document.getElementById("btn-show-soil");
 const btnShowPrice = document.getElementById("btn-show-price");
+const darkModeToggle = document.getElementById("dark-mode-toggle");
 
 btnCityWeather.addEventListener("click", getWeather);
 btnLocationWeather.addEventListener("click", getWeatherByLocation);
 btnShowCrops.addEventListener("click", showCrops);
 btnShowSoil.addEventListener("click", showSoil);
 btnShowPrice.addEventListener("click", showPrice);
+darkModeToggle.addEventListener("click", toggleDarkMode);
 
 // On page load, auto-detect weather by location
 window.onload = getWeatherByLocation;
@@ -43,14 +45,12 @@ async function getWeather() {
   try {
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
     const res = await fetch(url);
-    const data = await res.json();
+    if (!res.ok) throw new Error("Network response was not ok");
 
-    if (data.cod === 200) {
-      displayWeather(data);
-    } else {
-      document.getElementById("weather-output").innerText = "City not found.";
-    }
+    const data = await res.json();
+    displayWeather(data, false);
   } catch (error) {
+    console.error(error);
     document.getElementById("weather-output").innerText = "Failed to fetch weather data.";
   } finally {
     setLoading(false, "weather");
@@ -70,14 +70,12 @@ function getWeatherByLocation() {
     try {
       const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
       const res = await fetch(url);
-      const data = await res.json();
+      if (!res.ok) throw new Error("Network response was not ok");
 
-      if (data.cod === 200) {
-        displayWeather(data);
-      } else {
-        document.getElementById("weather-output").innerText = "Weather data not found for your location.";
-      }
+      const data = await res.json();
+      displayWeather(data, true);
     } catch (error) {
+      console.error(error);
       document.getElementById("weather-output").innerText = "Failed to fetch weather data.";
     } finally {
       setLoading(false, "weather");
@@ -92,15 +90,16 @@ function getWeatherByLocation() {
   });
 }
 
-function displayWeather(data) {
+function displayWeather(data, fromLocation = false) {
   const temp = data.main.temp;
   const condition = data.weather[0].main;
   const city = data.name;
+  const country = data.sys.country;
 
   const cropRecommendation = recommendCrop(temp, condition);
 
   document.getElementById("weather-output").innerHTML = `
-    <h3>Weather in ${city}:</h3>
+    <h3>${fromLocation ? "Your Current Location:" : "Weather in"} ${city}, ${country}:</h3>
     <p>Temperature: ${temp} °C</p>
     <p>Condition: ${condition}</p>
     <p><strong>Recommended Crop: ${cropRecommendation}</strong></p>
@@ -119,11 +118,10 @@ function showCrops() {
   const season = document.getElementById("season").value;
   const cropsList = crops[season];
 
-  if (cropsList && cropsList.length > 0) {
-    document.getElementById("crop-output").innerText = `Recommended crops for ${season}: ${cropsList.join(", ")}`;
-  } else {
-    document.getElementById("crop-output").innerText = "No crop data available for selected season.";
-  }
+  document.getElementById("crop-output").innerText =
+    cropsList && cropsList.length > 0
+      ? `Recommended crops for ${season}: ${cropsList.join(", ")}`
+      : "No crop data available for selected season.";
 }
 
 function showSoil() {
@@ -138,16 +136,23 @@ function showPrice() {
 }
 
 function setLoading(isLoading, section) {
-  let outputId;
-  switch (section) {
-    case "weather": outputId = "weather-output"; break;
-    case "crop": outputId = "crop-output"; break;
-    case "soil": outputId = "soil-output"; break;
-    case "price": outputId = "price-output"; break;
-  }
+  const outputIdMap = {
+    weather: "weather-output",
+    crop: "crop-output",
+    soil: "soil-output",
+    price: "price-output"
+  };
 
-  if (outputId) {
-    document.getElementById(outputId).innerText = isLoading ? "Loading..." : "";
+  const outputId = outputIdMap[section];
+  if (!outputId) return;
+
+  if (isLoading) {
+    document.getElementById(outputId).innerText = "Loading...";
   }
 }
+
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+}
+
 
